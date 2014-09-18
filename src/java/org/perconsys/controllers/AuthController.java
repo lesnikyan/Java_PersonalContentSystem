@@ -5,17 +5,14 @@
  */
 package org.perconsys.controllers;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.perconsys.dao.UserDao;
-import org.perconsys.dao.implement.UserJdbcTpl;
 import org.perconsys.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,16 +39,12 @@ public class AuthController {
 		return new ModelAndView("auth/reg_form", "user", new User());
 	}
 	
-	@RequestMapping(value="/register", method=RequestMethod.POST) // @ModelAttribute("user") //  ModelMap model,
+	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public String registerHandler(@Valid @ModelAttribute("user")  User user, BindingResult result){
 		if(result.hasErrors()){
-			// handle errors
-			//model.addAttribute("user", user);
 			return "auth/reg_form";
 		}
-	//	model.addAttribute("user", user);
 		dao.save(user);
-		
 		return "auth/reg_result";
 	}
 	
@@ -67,19 +60,6 @@ public class AuthController {
 	public String test_userList(ModelMap model){
 		model.addAttribute("users", dao.list(0L, 10L));
 		return "auth/test-userlist";
-	}
-	
-	/**
-	 * validate user's fields given from http request
-	 * @param user 
-	 */
-	private boolean validateUser(User user){
-		
-		if(1==1){
-			
-		}
-		
-		return true;
 	}
 	
 }
