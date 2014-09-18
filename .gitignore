@@ -1,0 +1,4 @@
+# ignore netbeans folders and external libs location
+/build
+/nbproject
+/libs

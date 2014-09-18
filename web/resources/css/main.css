@@ -1,0 +1,14 @@
+body{
+	color: #444;
+	background-color: white;
+}
+
+.formError {
+	color: red;
+}
+
+.form-field{
+	border: 1px solid #eee;
+	margin: 4px;
+	padding: 2px;
+}
