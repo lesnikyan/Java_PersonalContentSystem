@@ -5,11 +5,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-		<link rel="stylesheet" type="text/css" href="/perconsys/static/css/main.css" />
+		<link rel="stylesheet" type="text/css" href="${properties['base.webpath']}/static/css/main.css" />
     </head>
     <body>
         <h1>User registration</h1>
-        <sf:form method="POST" action="/perconsys/auth/register" modelAttribute="user">
+        <sf:form method="POST" action="${properties['base.webpath']}/register" modelAttribute="user">
             <div class="form-field">
 				<sf:errors path="name" class="formError" /><br />
 				<sf:input path="name" /> <sf:label path="name">Full Name</sf:label>

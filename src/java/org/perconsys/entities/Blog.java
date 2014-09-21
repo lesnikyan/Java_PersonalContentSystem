@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class Blog {
 	
-	private int id;
+	private long id;
 	
 	@NotEmpty(message="Empty name of blog")
 	private String name;
@@ -26,7 +26,7 @@ public class Blog {
 	/**
 	 * @return the id
 	 */
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
@@ -54,7 +54,7 @@ public class Blog {
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

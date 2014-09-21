@@ -14,6 +14,9 @@
 				<div>
 					Hello ${user.getName()}!
 				</div>
+				<div>
+					<a href="${properties['base.webpath']}/blog">My blogs</a>
+				</div>
 			</c:when>
 			<c:otherwise>
 				<a href="${properties['base.webpath']}/auth/register">Register and create personal blog</a><br>

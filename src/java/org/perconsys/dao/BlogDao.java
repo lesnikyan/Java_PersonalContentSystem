@@ -5,7 +5,9 @@
  */
 package org.perconsys.dao;
 
+import java.util.List;
 import org.perconsys.entities.Blog;
+import org.perconsys.entities.User;
 
 /**
  *
@@ -13,8 +15,10 @@ import org.perconsys.entities.Blog;
  */
 public interface BlogDao {
 	public Blog getByName(String name);
-	public Blog getById(int id);
+	public Blog getById(long id);
+	public List<Blog> blogsByUser(User user);
+	public Blog getByIdUser(long id, User user);
 	public Blog create(Blog blog);
-	public void update(Blog blog);
-	public void delete(int id);
+	public boolean update(Blog blog, User user);
+	public void delete(long id);
 }
