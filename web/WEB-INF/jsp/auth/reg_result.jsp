@@ -13,5 +13,8 @@
     </head>
     <body>
         <h1>Registered!</h1>
+		<div>
+			<a href="${properties['base.webpath']}/auth/login">Login</a>
+		</div>
     </body>
 </html>

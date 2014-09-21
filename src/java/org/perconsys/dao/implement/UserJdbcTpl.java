@@ -84,7 +84,7 @@ public class UserJdbcTpl extends JdbcDaoSupport implements UserDao {
 				PreparedStatement pstat = conn.prepareStatement(sql, new String[]{"id"});
 				pstat.setString(1, user.getName());
 				pstat.setString(2, user.getLogin());
-				pstat.setString(3, user.getPassword());
+				pstat.setString(3, hash(user.getPassword()));
 				pstat.setString(4, user.getEmail());
 				pstat.setString(5, "");
 				return pstat;
