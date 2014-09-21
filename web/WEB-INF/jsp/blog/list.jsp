@@ -16,6 +16,8 @@
 		<c:forEach items="${blogs}" var="blog">
 			<div>
 				${blog.getName()}
+				- <a href="${properties['base.webpath']}/blog/edit/${blog.getId()}">edit<a/>
+				- <a href="${properties['base.webpath']}/blog/view/${blog.getId()}">view<a/>
 			</div>
 		</c:forEach>
 		</div>

@@ -9,7 +9,7 @@
     </head>
     <body>
         <h1>Edit blog info</h1>
-		<sf:form method="POST" action="${properties['base.webpath']}/auth/register" modelAttribute="user">
+		<sf:form method="POST" action="${properties['base.webpath']}/blog/edit" modelAttribute="blog">
 			<sf:hidden path="id" /><%-- use blog's id for saving, but check auth by user session --%>
             <div class="form-field">
 				<sf:errors path="name" class="formError" /><br />

@@ -22,6 +22,13 @@ public class Blog {
 	private String url_name;
 	
 	private User user = null;
+	
+	public Blog(){}
+	
+	public Blog(String name, String url_name){
+		this.name = name;
+		this.url_name = url_name;
+	}
 
 	/**
 	 * @return the id

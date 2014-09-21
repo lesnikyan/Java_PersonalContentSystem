@@ -84,7 +84,7 @@ public class BlogDb extends JdbcDaoSupport implements BlogDao {
 			}
 		}
 		, keyh);
-		Integer id = (Integer)keyh.getKey();
+		Long id = (Long)keyh.getKey();
 		blog.setId(id);
 		return blog;
 	}

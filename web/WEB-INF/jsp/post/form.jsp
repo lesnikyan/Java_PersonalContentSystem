@@ -1,10 +1,6 @@
-<%-- 
-    Document   : main
-    Created on : 16.09.2014, 12:16:42
-    Author     : Less
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,9 +8,11 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Blog main page</h1>
+        <h1>Hello World!</h1>
 		<div>
-			<a href="${properties['base.webpath']}/auth/login">Login</a><br>
+			<sf:form method="POST" action="${properties['base.webpath']}/post/edit" modelAttribute="post">
+				
+			</sf:form>
 		</div>
     </body>
 </html>

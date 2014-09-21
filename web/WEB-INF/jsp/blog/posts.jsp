@@ -9,6 +9,9 @@
     </head>
     <body>
         <h1>Last records</h1>
+		<div>
+			<a href="${properties['base.webpath']}/post/create">new post<a/>
+		</div>
 		<c:forEach items="${posts}" var="post">
 			<div>
 				${post.getName()}

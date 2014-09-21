@@ -5,6 +5,11 @@
  */
 package org.perconsys.controllers;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -14,6 +19,20 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * @author Less
  */
 public class BasicController {
+	
+	Map<String, Cookie> cookies = new HashMap<>();
+	
+	public BasicController(){
+//		Cookie[] cookieArr = getRequest().getCookies();
+//		for(Cookie c: cookieArr){
+//			cookies.put(c.getName(), c);
+//		}
+	}
+	
+	public static HttpServletRequest getRequest(){
+		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+				.getRequest();
+	}
 	
 	public static HttpSession getSession(){
 		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();

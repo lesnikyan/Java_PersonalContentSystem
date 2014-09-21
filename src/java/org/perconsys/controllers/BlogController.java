@@ -6,6 +6,7 @@
 package org.perconsys.controllers;
 
 import java.util.List;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import org.perconsys.dao.BlogDao;
 import org.perconsys.dao.UserDao;
@@ -44,9 +45,14 @@ public class BlogController extends BasicController {
 		return "blog/list";
 	}
 	
+	@RequestMapping(value={"/test"}, method=RequestMethod.GET)
+	public String testMapping(){
+		return "blog/main";
+	}
+	
 	@RequestMapping({"/view/{name}"})
 	public String viewBlog(@PathVariable String name, ModelMap model){
-		String numRgx = "[^\\d+$]{1,10}";
+		String numRgx = "^[\\d]{1,10}$";
 		Blog blog;
 		if(name.matches(numRgx)){ // if number
 			// get Blog by id
@@ -64,34 +70,42 @@ public class BlogController extends BasicController {
 	}
 	
 	@RequestMapping(value={"/create"}, method=RequestMethod.GET)
-	public ModelAndView createForm(@CookieValue("authKey") String authKey){
+	public ModelAndView createForm(){
 		User user = ((User)getFromSession("user"));
 		if(user == null){
 			// trying login by cookie
-			user = userDao.getByKey(authKey);
+			Cookie authCookie = cookies.get("authKey");
+			if(authCookie != null){
+				String authKey = authCookie.getValue();
+				user = userDao.getByKey(authKey);
+			}
 			// if no user - redirect to login page
 			if(user == null){
-				return new ModelAndView("auth/login_form", "user", user);
+				return new ModelAndView("auth/login_form", "user", new User());
 			}
 		}
 		
-		Blog blog = new Blog();
+		Blog blog = new Blog("new blog", "");
 		blog.setUser(user);
 		blog = blogDao.create(blog);
-		return new ModelAndView("blog/form", "blog", blog);
+		return new ModelAndView("blog/edit_form", "blog", blog);
 	}
 	
-	@RequestMapping(value={"/edit/{id}"}, method=RequestMethod.GET)
-	public ModelAndView editForm(@PathVariable("id") long id, @CookieValue("authKey") String authKey,
+	@RequestMapping(value={"edit/{id}"}, method=RequestMethod.GET)
+	public ModelAndView editForm(@PathVariable("id") long id,
 			HttpServletRequest request){
 		
 		User user = ((User)request.getSession(true).getAttribute("user"));
 		if(user == null){
 			// trying login by cookie
-			user = userDao.getByKey(authKey);
+			Cookie authCookie = cookies.get("authKey");
+			if(authCookie != null){
+				String authKey = authCookie.getValue();
+				user = userDao.getByKey(authKey);
+			}
 			// if no user - redirect to login page
 			if(user == null){
-				return new ModelAndView("auth/login_form", "user", user);
+				return new ModelAndView("auth/login_form", "user", new User());
 			}
 		}
 		
@@ -102,14 +116,14 @@ public class BlogController extends BasicController {
 		} else {
 			if(user.getId() != blog.getUser().getId()){
 				// if user is not an owner
-				return new ModelAndView("redirect:/blog/"+id);
+				return new ModelAndView("redirect:/blog/view/"+id);
 			}
 		}
 		blog.setUser(user);
-		return new ModelAndView("blog/form", "blog", blog);
+		return new ModelAndView("blog/edit_form", "blog", blog);
 	}
 	
-	@RequestMapping(value="/edit", method=RequestMethod.POST)
+	@RequestMapping(value="edit", method=RequestMethod.POST)
 	public String editHandler(@ModelAttribute("blog") Blog blogData, ModelMap model){
 		User user = (User) getFromSession("user");
 		if(user == null){
@@ -122,13 +136,11 @@ public class BlogController extends BasicController {
 		}
 		// current user is not an owner of blog
 		if(blog.getUser().getId() != user.getId()){
-			return "redirect:/blog/"+blogData.getId();
+			return "redirect:/blog/view/"+blogData.getId();
 		}
 		blogDao.update(blogData, user);
 		
-		return "blog/" + blogData.getId();
+		return "redirect:/blog/view/" + blogData.getId();
 	}
-	
-
 	
 }
