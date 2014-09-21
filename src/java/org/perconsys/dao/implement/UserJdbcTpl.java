@@ -6,6 +6,8 @@
 package org.perconsys.dao.implement;
 
 import java.security.MessageDigest;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -14,8 +16,11 @@ import org.apache.commons.codec.digest.Sha2Crypt;
 import org.perconsys.dao.UserDao;
 import org.perconsys.entities.User;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 /**
  *
@@ -23,8 +28,8 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
  */
 public class UserJdbcTpl extends JdbcDaoSupport implements UserDao {
 	
-	private String table = "users";
-	private String keySalt = "12345";
+	private String table;
+	private String keySalt;
 	
 	public void setTable(String value){
 		table = value;
@@ -33,12 +38,20 @@ public class UserJdbcTpl extends JdbcDaoSupport implements UserDao {
 	public void setKeySalt(String value){
 		keySalt = value;
 	}
-	
-	
-	public int add(User user){
-		return 0;
+
+	/**
+	 * @return the table
+	 */
+	public String getTable() {
+		return table;
 	}
-	
+
+	/**
+	 * @return the keySalt
+	 */
+	public String getKeySalt() {
+		return keySalt;
+	}
 	
 	@Override
 	public void test(){
@@ -50,21 +63,74 @@ public class UserJdbcTpl extends JdbcDaoSupport implements UserDao {
 	}
 
 	@Override
-	public int save(User user) {
-		JdbcTemplate dbtpl = this.getJdbcTemplate();
+	public User add(final User user) {
+		//JdbcTemplate dbtpl = this.getJdbcTemplate();
 		
-		return dbtpl.update("insert into `users` (`name`, `login`, `password`, `email`, `authKey`) values (?, ?, ?, ?, ?)",
-			user.getName(),
-			user.getLogin(),
-			user.getPassword(),
-			user.getEmail(),
-			""
-				);
+//		return dbtpl.update("insert into `users` (`name`, `login`, `password`, `email`, `authKey`) values (?, ?, ?, ?, ?)",
+//			user.getName(),
+//			user.getLogin(),
+//			user.getPassword(),
+//			user.getEmail(),
+//			""
+//				);
+		
+		KeyHolder keyh = new GeneratedKeyHolder();
+		final String sql = String.format("insert into `%s` (`name`, `login`, `password`, `email`, `authKey`) "
+				+ "values (?, ?, ?, ?, ?) ;", table);
+		
+		PreparedStatementCreator statcr = new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+				PreparedStatement pstat = conn.prepareStatement(sql, new String[]{"id"});
+				pstat.setString(1, user.getName());
+				pstat.setString(2, user.getLogin());
+				pstat.setString(3, user.getPassword());
+				pstat.setString(4, user.getEmail());
+				pstat.setString(5, "");
+				return pstat;
+			}
+		};
+		getJdbcTemplate().update(statcr, keyh);
+		Long id = (Long) keyh.getKey();
+		user.setId(id);
+		return user;
+	}
+
+	@Override
+	public boolean update(User user) {
+		return getJdbcTemplate().update(String.format("update `%s` set "
+				+ "name = ?, login = ?, password = ?, email = ? "
+				+ "where id = ?", table), 
+				user.getName(), user.getLogin(), hash(user.getPassword()), user.getEmail(), user.getId())
+				> 0;
+	}
+
+	@Override
+	public boolean updateAuthKey(User user) {
+		return getJdbcTemplate().update(String.format("update `%s` set "
+				+ "authKey = ? "
+				+ "where id = ?", table), 
+				user.getName(), user.getLogin(), hash(user.getPassword()), user.getEmail(), user.getId())
+				> 0;
 	}
 
 	@Override
 	public User getById(long id) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		List<User> res = getJdbcTemplate().query(String.format("select * from `%s` where `id` = ? ;", table), 
+				new UserMapper(), id);
+		if(res.isEmpty()){
+			return null;
+		}
+		return res.get(0);
+	}
+	
+	@Override
+	public User checkByLogin(String login, String password){
+		final String sql = String.format("select * from `%s` where login = ? AND password = ? ;", table);
+		List<User> res = getJdbcTemplate().query(sql, new UserMapper(), login, hash(password));
+		if(res.isEmpty())
+			return null;
+		return res.get(0);
 	}
 
 	@Override
@@ -98,15 +164,20 @@ public class UserJdbcTpl extends JdbcDaoSupport implements UserDao {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 	
+	@Override
 	public String hash(String src){
-		return Sha2Crypt.sha512Crypt(src.getBytes(), keySalt);
+		return Sha2Crypt.sha512Crypt(src.getBytes(), getKeySalt());
 	}
-	
-	public String encode(String src){
-		return "";
-	}
-	public String decode(String src){
-		return "";
+
+	@Override
+	public User getByKey(String key) {
+		JdbcTemplate dbtpl = this.getJdbcTemplate();
+		String sql = String.format("select * from `%s` WHERE `authKey` = ? LIMIT 0, 1 ;", table);
+		return dbtpl.queryForObject(
+			sql, 
+			new Object[]{key}, 
+			new UserMapper()
+		);
 	}
 	
 	class UserMapper implements ParameterizedRowMapper<User> {

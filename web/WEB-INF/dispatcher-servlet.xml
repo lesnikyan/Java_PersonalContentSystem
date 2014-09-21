@@ -21,19 +21,29 @@
 	for the index controller we are using ParameterizableViewController, so we must
 	define an explicit mapping for it.
 	-->
-	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+<!--	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<props>
 				<prop key="index">indexController</prop>
 			</props>
 		</property>
-	</bean>
+	</bean>-->
 
+	<bean id="properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list><value>/WEB-INF/config.properties</value></list>
+		</property>
+	</bean>
 	<bean id="viewResolver"
 		  class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		  p:prefix="/WEB-INF/jsp/"
 		  p:suffix=".jsp" >
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="exposedContextBeanNames">
+			<list>
+				<value>properties</value>
+			</list>
+		</property>
 	</bean>
 
 	<!--
@@ -58,6 +68,10 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="keySalt" value="abc123" />
 		<property name="table" value="users" />
+	</bean>
+    
+	<bean id="blogDao" class="org.perconsys.dao.implement.BlogDb">
+		<property name="dataSource" ref="dataSource" />
 	</bean>
     
 	<mvc:annotation-driven />

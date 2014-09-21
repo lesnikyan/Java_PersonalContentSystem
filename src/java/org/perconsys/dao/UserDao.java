@@ -13,9 +13,12 @@ import org.perconsys.entities.User;
  * @author Less
  */
 public interface UserDao {
-	public int add(User user);
-	public int save(User user);
+	public User add(final User user);
+	public boolean update(User user);
+	public boolean updateAuthKey(User user);
 	public User getById(long id);
+	public User getByKey(String key);
+	public User checkByLogin(String login, String password);
 	public List<User> list(Long from, Long count);
 	public List<User> listByName(String nameTpl);
 	public List<User> listByEmail(String emailTpl);
