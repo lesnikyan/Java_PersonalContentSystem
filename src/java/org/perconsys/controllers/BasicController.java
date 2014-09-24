@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.perconsys.entities.User;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -27,6 +28,10 @@ public class BasicController {
 //		for(Cookie c: cookieArr){
 //			cookies.put(c.getName(), c);
 //		}
+	}
+	
+	public User currentUser(){
+		return (User)getFromSession("user");
 	}
 	
 	public static HttpServletRequest getRequest(){

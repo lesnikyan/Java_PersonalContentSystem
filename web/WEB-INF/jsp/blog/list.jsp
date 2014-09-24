@@ -9,6 +9,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+		<link rel="stylesheet" type="text/css" href="/perconsys/static/css/main.css" />
     </head>
     <body>
         <h1>List of my blogs</h1>
@@ -16,13 +17,13 @@
 		<c:forEach items="${blogs}" var="blog">
 			<div>
 				${blog.getName()}
-				- <a href="${properties['base.webpath']}/blog/edit/${blog.getId()}">edit<a/>
-				- <a href="${properties['base.webpath']}/blog/view/${blog.getId()}">view<a/>
+				- <a href="${properties['base.webpath']}/editblog/edit/${blog.getId()}">edit<a/>
+				- <a href="${properties['base.webpath']}/blog/${blog.getId()}">view<a/>
 			</div>
 		</c:forEach>
 		</div>
 		<div>
-			<a href="${properties['base.webpath']}/blog/create">Create blog</a>
+			<a href="${properties['base.webpath']}/editblog/create">Create blog</a>
 		</div>
     </body>
 </html>

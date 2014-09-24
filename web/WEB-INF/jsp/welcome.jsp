@@ -6,6 +6,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+		<link rel="stylesheet" type="text/css" href="/perconsys/static/css/main.css" />
     </head>
     <body>
         <h1>PersonilizedContent System</h1>
@@ -15,7 +16,7 @@
 					Hello ${user.getName()}!
 				</div>
 				<div>
-					<a href="${properties['base.webpath']}/blog">My blogs</a>
+					<a href="${properties['base.webpath']}/editblog">My blogs</a>
 				</div>
 			</c:when>
 			<c:otherwise>

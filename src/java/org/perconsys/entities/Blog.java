@@ -25,6 +25,10 @@ public class Blog {
 	
 	public Blog(){}
 	
+	public Blog(long id){
+		this.id= id;
+	}
+	
 	public Blog(String name, String url_name){
 		this.name = name;
 		this.url_name = url_name;

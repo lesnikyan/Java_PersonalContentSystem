@@ -11,9 +11,11 @@ import java.util.Date;
  *
  * @author Less
  */
-public class Post {
-	private long id = 0;
-	private Blog blog;
+public class Comment {
+	private long id;
+	private long postId;
+	private long targetId = 0;
+	private User user;
 	private String title;
 	private String content;
 	private Date date;
@@ -26,10 +28,24 @@ public class Post {
 	}
 
 	/**
-	 * @return the blog
+	 * @return the postId
 	 */
-	public Blog getBlog() {
-		return blog;
+	public long getPostId() {
+		return postId;
+	}
+
+	/**
+	 * @return the targetId
+	 */
+	public long getTargetId() {
+		return targetId;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
 	}
 
 	/**
@@ -61,10 +77,24 @@ public class Post {
 	}
 
 	/**
-	 * @param blog the blog to set
+	 * @param postId the postId to set
 	 */
-	public void setBlog(Blog blog) {
-		this.blog = blog;
+	public void setPostId(long postId) {
+		this.postId = postId;
+	}
+
+	/**
+	 * @param targetId the targetId to set
+	 */
+	public void setTargetId(long targetId) {
+		this.targetId = targetId;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	/**
@@ -87,5 +117,4 @@ public class Post {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	
 }

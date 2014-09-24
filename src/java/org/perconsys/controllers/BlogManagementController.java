@@ -9,8 +9,10 @@ import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import org.perconsys.dao.BlogDao;
+import org.perconsys.dao.PostDao;
 import org.perconsys.dao.UserDao;
 import org.perconsys.entities.Blog;
+import org.perconsys.entities.Post;
 import org.perconsys.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,12 +26,14 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Less
  */
 @Controller
-@RequestMapping("/blog")
-public class BlogController extends BasicController {
+@RequestMapping("/editblog")
+public class BlogManagementController extends BasicController {
 	@Autowired
 	private BlogDao blogDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private PostDao postDao;
 	
 	
 	@RequestMapping({""})
@@ -50,24 +54,7 @@ public class BlogController extends BasicController {
 		return "blog/main";
 	}
 	
-	@RequestMapping({"/view/{name}"})
-	public String viewBlog(@PathVariable String name, ModelMap model){
-		String numRgx = "^[\\d]{1,10}$";
-		Blog blog;
-		if(name.matches(numRgx)){ // if number
-			// get Blog by id
-			blog = blogDao.getById(Long.parseLong(name));
-		} else { // if name
-			// get blog by name
-			blog = blogDao.getByName(name);
-		}
-		if(blog == null){
-			// not found
-		}
-		model.addAttribute("blog", blog);
-		
-		return "blog/posts";
-	}
+
 	
 	@RequestMapping(value={"/create"}, method=RequestMethod.GET)
 	public ModelAndView createForm(){
@@ -112,11 +99,11 @@ public class BlogController extends BasicController {
 		Blog blog = blogDao.getById(id);
 		if(blog == null){
 			// if no blog bi this id
-			return new ModelAndView("redirect:/blog/create");
+			return new ModelAndView("redirect:/editblog/create");
 		} else {
 			if(user.getId() != blog.getUser().getId()){
 				// if user is not an owner
-				return new ModelAndView("redirect:/blog/view/"+id);
+				return new ModelAndView("redirect:/blog/"+id);
 			}
 		}
 		blog.setUser(user);
@@ -136,11 +123,11 @@ public class BlogController extends BasicController {
 		}
 		// current user is not an owner of blog
 		if(blog.getUser().getId() != user.getId()){
-			return "redirect:/blog/view/"+blogData.getId();
+			return "redirect:/blog/"+blogData.getId();
 		}
 		blogDao.update(blogData, user);
 		
-		return "redirect:/blog/view/" + blogData.getId();
+		return "redirect:/blog/" + blogData.getId();
 	}
 	
 }

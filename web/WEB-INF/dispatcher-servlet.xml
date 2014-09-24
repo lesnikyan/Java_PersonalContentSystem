@@ -74,6 +74,14 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
     
+	<bean id="postDao" class="org.perconsys.dao.implement.PostDb">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+    
+	<bean id="commentDao" class="org.perconsys.dao.implement.CommentDb">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+    
 	<mvc:annotation-driven />
 	
 	<mvc:resources mapping="/static/**" location="/resources/" />

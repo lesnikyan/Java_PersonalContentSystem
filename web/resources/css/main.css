@@ -12,3 +12,59 @@ body{
 	margin: 4px;
 	padding: 2px;
 }
+
+.post-field textarea{
+	width: 600px;
+	height: 400px;
+	background-color: #ffe;
+}
+
+
+.posts-list{
+	
+}
+
+.post-container{
+	border: 1px solid #eee;
+	border-radius: 5px;
+	padding: 10px;
+	margin: 5px;
+}
+
+.post-title{
+	color: #888;
+	margin: 0 5px 5px 15px ;
+}
+.post-title a{
+	text-decoration: none;
+	color: #aaf;
+}
+
+.post-content {
+	color: #444;
+	margin: 5px;
+	background-color: #f8f8ff;
+	border-radius: 4px;
+	padding: 5px;
+}
+.post-date{
+	color: #aaa;
+}
+
+.action-buttons a.butt {
+	display: inline-block;
+	border: 1px solid #eef;
+	border-radius: 4px;
+	text-decoration: none;
+	margin: 5px;
+	padding: 2px 5px 2px 5px;
+}
+
+.post-blog-links a{
+	display: inline-block;
+	border: 1px solid #eef;
+	border-radius: 4px;
+	text-decoration: none;
+	margin: 5px;
+	padding: 2px 5px 2px 5px;
+}

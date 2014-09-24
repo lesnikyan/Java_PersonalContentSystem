@@ -10,8 +10,14 @@
     <body>
         <h1>Hello World!</h1>
 		<div>
-			<sf:form method="POST" action="${properties['base.webpath']}/post/edit" modelAttribute="post">
-				
+			<sf:form method="POST" action="${properties['base.webpath']}/editpost/save" modelAttribute="post">
+				<sf:hidden path="id" />			
+				<input type="hidden" value="${blogId}" name="blog_id" />			
+            <div class="form-field post-field">
+				<sf:input path="title" /><br />
+				<sf:textarea path="content" />
+			</div>
+			<div><input type="submit" name="Save" /></div>
 			</sf:form>
 		</div>
     </body>
